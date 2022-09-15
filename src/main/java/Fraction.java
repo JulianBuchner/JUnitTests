@@ -8,7 +8,7 @@ public class Fraction {
     }
 
     public int getDividend() {
-        return dividend - 1;
+        return dividend;
     }
 
     public void setDividend(int dividend) {
