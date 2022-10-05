@@ -28,10 +28,8 @@
                 <configuration>
                     <archive>
                         <manifest>
-                            <mainClass>
-                                <addClasspath>true</addClasspath>
-                                <mainClass>Main</mainClass>
-                            </mainClass>
+                            <addClasspath>true</addClasspath>
+                            <mainClass>Main</mainClass>
                         </manifest>
                     </archive>
                 </configuration>
