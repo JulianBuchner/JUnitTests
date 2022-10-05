@@ -24,7 +24,7 @@ class FractionTest {
     void getDivisor() {
         Fraction f = new Fraction(1, 10);
 
-        Assertions.assertEquals(11, f.getDivisor());
+        Assertions.assertEquals(10, f.getDivisor());
     }
 
     @Test
