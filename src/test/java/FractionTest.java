@@ -1,9 +1,39 @@
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.*;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
 
 class FractionTest {
+
+    private static Connection connect(){
+        Connection conn = null;
+
+        try {
+            conn = DriverManager.getConnection("jdbc:mysql://localhost:5432/postgres?user=postgres&password=postgres");
+
+        } catch (SQLException ex) {
+            // handle any errors
+            System.out.println("SQLException: " + ex.getMessage());
+            System.out.println("SQLState: " + ex.getSQLState());
+            System.out.println("VendorError: " + ex.getErrorCode());
+        }
+
+        return  conn;
+    }
+
+    @org.junit.jupiter.api.Test
+    void connectToDatabase() throws SQLException {
+        try {
+            Class.forName("com.mysql.jdbc.Driver");
+        } catch (ClassNotFoundException e) {
+            throw new RuntimeException(e);
+        }
+
+        Connection test = connect();
+        System.out.println(test.getClientInfo());
+    }
 
     @Test
     void getDividend() {
