@@ -28,7 +28,9 @@ jobs:
           distribution: 'adopt'
 
       - name: Build
-        run: mvn --batch-mode -DskipTests package
+		    run: mvn --batch-mode -DskipTests package
+      - run: mkdir staging && cp target/*.jar staging
+      - uses: actions/upload-artifact@v3
 
       - name: Test
         run: mvn --batch-mode -Dmaven.test.failure.ignore=true test
