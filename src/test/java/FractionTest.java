@@ -96,7 +96,7 @@ class FractionTest {
             Connection c = connect("testoo");
 
             Statement s = c.createStatement();
-            s.executeUpdate("DELETE mycolumn FROM testootable");
+            s.executeUpdate("DELETE FROM testootable WHERE mycolumn='random txt'");
 
             s.close();
             c.close();
