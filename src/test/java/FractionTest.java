@@ -1,61 +1,43 @@
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.function.ThrowingSupplier;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
+import java.sql.*;
 
 class FractionTest {
-
-    private static Connection connect(String connectionString){
+    private Connection connect(String db) throws SQLException{
         Connection conn = null;
 
-        try {
-            conn = DriverManager.getConnection(connectionString);
-
-        } catch (SQLException ex) {
-            // handle any errors
-            System.out.println("SQLException: " + ex.getMessage());
-            System.out.println("SQLState: " + ex.getSQLState());
-            System.out.println("VendorError: " + ex.getErrorCode());
+        if (db.length() > 0) {
+            conn = DriverManager.getConnection("jdbc:mysql://localhost:3306", "root", "root");
+        } else {
+            conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/" + db, "root", "root");
         }
 
         return  conn;
     }
 
-    @org.junit.jupiter.api.Test
-    void connectToDatabase() throws SQLException {
-        try {
-            Class.forName("org.postgresql.Driver");
-        } catch (ClassNotFoundException e) {
-            throw new RuntimeException(e);
-        }
-
-        Connection postgres = connect("jdbc:postgresql://localhost:5432/postgres?" +
-                "user=postgres&password=postgres");
-        Assertions.assertNotNull(postgres);
-        Connection mysql = connect("jdbc:mysql://localhost:3306?user=root&password=root");
-        Assertions.assertNotNull(mysql);
-
-        System.out.println(postgres.getClientInfo());
-        PreparedStatement db = mysql.prepareStatement("CREATE DATABASE `db`");
-        Assertions.assertFalse(db.execute());
-        // disconnect from server
-        mysql.close();
-        mysql = connect("jdbc:mysql://localhost:3306/db?user=root&password=root");
-        Assertions.assertNotNull(mysql);
-        // reconnect to server + database
-
-        PreparedStatement table = mysql.prepareStatement("CREATE TABLE `db.Persons` ( `Name` varchar(255) )");
-        Assertions.assertFalse(table.execute());
-
-        PreparedStatement row = mysql.prepareStatement("INSERT INTO `db.Persons` ( `Name` )  values " +
-                "( 'Marco' )");
-        Assertions.assertFalse(row.execute());
-
+    // lambda geht nur bei Interfaces die nur EINE Methode hat
+    @Test
+    @Order(1)
+    void connectToDatabase()  {
+        Assertions.assertDoesNotThrow(() -> connect(""));
     }
 
+    @Test
+    @Order(2)
+    void createDatabase() {
+        Assertions.assertDoesNotThrow(() -> {
+            Connection c = connect("");
+
+            Statement s = c.createStatement();
+            s.executeUpdate("CREATE DATABASE testoo");
+
+            s.close();
+            c.close();
+        });
+    }
 
     @org.junit.jupiter.api.Test
     void constructorTest(){
