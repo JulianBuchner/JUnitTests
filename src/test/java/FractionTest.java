@@ -79,9 +79,9 @@ class FractionTest {
             Connection c = connect("testoo");
 
             Statement s = c.createStatement();
-            ResultSet res = s.executeQuery("SELECT * FROM testoo");
+            ResultSet res = s.executeQuery("SELECT * FROM testoo LIMIT 1");
 
-            if (res.first()) {
+            if (res.next()) {
                 Assertions.assertEquals(res.getString("mycolumn"), "random txt");
             }
 
