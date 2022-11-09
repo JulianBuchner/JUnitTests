@@ -96,7 +96,7 @@ class FractionTest {
             Connection c = connect("testoo");
 
             Statement s = c.createStatement();
-            ResultSet res = s.executeQuery("DELETE mycolumn FROM testoo");
+            ResultSet res = s.executeQuery("DELETE mycolumn FROM testootable");
 
             s.close();
             c.close();
