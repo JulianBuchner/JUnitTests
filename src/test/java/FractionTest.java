@@ -97,7 +97,7 @@ class FractionTest {
             Connection c = connect("testoo");
 
             Statement s = c.createStatement();
-            ResultSet res = s.executeQuery("DROP * FROM testoo");
+            ResultSet res = s.executeQuery("DELETE mycolumn FROM testoo");
 
             s.close();
             c.close();
@@ -122,7 +122,7 @@ class FractionTest {
     @Order(9)
     void dropDatabase() {
         Assertions.assertDoesNotThrow(() -> {
-            Connection c = connect("");
+            Connection c = connect("testoo");
 
             Statement s = c.createStatement();
             s.executeUpdate("DROP DATABASE testoo");
