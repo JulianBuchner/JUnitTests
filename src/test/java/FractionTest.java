@@ -1,12 +1,14 @@
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.function.ThrowingSupplier;
 
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
+import java.sql.Statement;
 
 class FractionTest {
-    private Connection connect(String db) throws SQLException{
+    private Connection connect(String db) throws SQLException {
         Connection conn = null;
 
         if (db.length() > 0) {
@@ -15,13 +17,13 @@ class FractionTest {
             conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/" + db, "root", "root");
         }
 
-        return  conn;
+        return conn;
     }
 
     // lambda geht nur bei Interfaces die nur EINE Methode hat
     @Test
     @Order(1)
-    void connectToDatabase()  {
+    void connectToDatabase() {
         Assertions.assertDoesNotThrow(() -> connect(""));
     }
 
@@ -40,7 +42,7 @@ class FractionTest {
     }
 
     @org.junit.jupiter.api.Test
-    void constructorTest(){
+    void constructorTest() {
         // check normal use
         Fraction f1 = new Fraction(1, 1);
         Assertions.assertEquals("1 / 1", f1.toString());
@@ -115,7 +117,8 @@ class FractionTest {
         Fraction f = new Fraction(1, 10);
         try {
             f.setDivisor(20);
-        }catch (Exception ignored){}
+        } catch (Exception ignored) {
+        }
 
         Assertions.assertEquals(20, f.getDivisor());
 
@@ -123,7 +126,8 @@ class FractionTest {
         Fraction f2 = new Fraction(1, 10);
         try {
             f2.setDivisor(-1);
-        } catch (Exception ignored) {}
+        } catch (Exception ignored) {
+        }
 
         Assertions.assertEquals(-1, f2.getDivisor());
 
@@ -131,8 +135,8 @@ class FractionTest {
         Fraction f3 = new Fraction(1, 10);
         try {
             f3.setDivisor(0);
-        }catch (Exception e){
-            Assertions.assertEquals("can't divide through 0",e.getMessage());
+        } catch (Exception e) {
+            Assertions.assertEquals("can't divide through 0", e.getMessage());
         }
 
         Assertions.assertEquals(10, f3.getDivisor());
@@ -167,8 +171,8 @@ class FractionTest {
 
     @Test
     void add() {
-        Fraction f1 = new Fraction(12,78);
-        Fraction f2 = new Fraction(4,6);
+        Fraction f1 = new Fraction(12, 78);
+        Fraction f2 = new Fraction(4, 6);
 
         Fraction result = f1.add(f2).shorten();
 
@@ -178,8 +182,8 @@ class FractionTest {
 
     @Test
     void sub() {
-        Fraction f1 = new Fraction(1,70);
-        Fraction f2 = new Fraction(2,90);
+        Fraction f1 = new Fraction(1, 70);
+        Fraction f2 = new Fraction(2, 90);
 
         Fraction result = f1.subtract(f2).shorten();
         Assertions.assertEquals(-1, result.getDividend());
@@ -188,8 +192,8 @@ class FractionTest {
 
     @Test
     void mul() {
-        Fraction f1 = new Fraction(1,27);
-        Fraction f2 = new Fraction(9,44);
+        Fraction f1 = new Fraction(1, 27);
+        Fraction f2 = new Fraction(9, 44);
 
         Fraction result = f1.multiply(f2).shorten();
         Assertions.assertEquals(1, result.getDividend());
@@ -198,8 +202,8 @@ class FractionTest {
 
     @Test
     void div() {
-        Fraction f1 = new Fraction(1,27);
-        Fraction f2 = new Fraction(9,44);
+        Fraction f1 = new Fraction(1, 27);
+        Fraction f2 = new Fraction(9, 44);
 
         Fraction result = f1.divide(f2).shorten();
 
