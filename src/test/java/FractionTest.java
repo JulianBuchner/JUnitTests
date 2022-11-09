@@ -1,14 +1,13 @@
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.Order;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 
 import java.sql.*;
 
+@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 class FractionTest {
     private Connection connect(String db) throws SQLException {
         Connection conn = null;
 
-        if (db.length() > 0) {
+        if (db.length() <= 0) {
             conn = DriverManager.getConnection("jdbc:mysql://localhost:3306", "root", "root");
         } else {
             conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/" + db, "root", "root");
